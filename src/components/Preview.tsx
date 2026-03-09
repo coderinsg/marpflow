@@ -46,21 +46,21 @@ export const Preview: React.FC = () => {
   const { displayHtml, displayCss, slideCount } = useMemo(() => {
     const customStyle = `
       svg.marpit {
-        background-color: ${theme.backgroundColor} !important;
+        background-color: ${theme.backgroundColor};
         margin-bottom: ${isPreviewFullscreen ? '0' : '4rem'};
         box-shadow: ${isPreviewFullscreen ? 'none' : '0 10px 30px rgba(0,0,0,0.1)'};
         transition: background-color 0.3s ease;
       }
       .marpit section, [class*="marpit"] section {
-        background-color: ${theme.backgroundColor} !important;
-        color: ${theme.textColor} !important;
+        background-color: ${theme.backgroundColor};
+        color: ${theme.textColor};
         font-family: "${theme.fontFamily}", sans-serif !important;
         transition: background-color 0.3s ease, color 0.3s ease;
       }
       /* Ensure body text elements inherit the section color */
       .marpit section p, .marpit section li, .marpit section blockquote, .marpit section span, .marpit section div,
       [class*="marpit"] section p, [class*="marpit"] section li, [class*="marpit"] section blockquote, [class*="marpit"] section span, [class*="marpit"] section div {
-        color: inherit !important;
+        color: inherit;
       }
       .marpit h1, .marpit h2, .marpit h3, .marpit strong,
       [class*="marpit"] h1, [class*="marpit"] h2, [class*="marpit"] h3, [class*="marpit"] strong {
