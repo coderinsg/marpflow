@@ -46,15 +46,15 @@ export const Preview: React.FC = () => {
   const { displayHtml, displayCss, slideCount } = useMemo(() => {
     const customStyle = `
       svg.marpit {
-        background-color: ${theme.backgroundColor} !important;
+        background-color: ${theme.backgroundColor};
         margin-bottom: ${isPreviewFullscreen ? '0' : '4rem'};
         box-shadow: ${isPreviewFullscreen ? 'none' : '0 10px 30px rgba(0,0,0,0.1)'};
         transition: background-color 0.3s ease;
       }
       /* High specificity to beat theme defaults but allow inline style (directive) overrides */
       div.marpit section, div.marpit-fullscreen section, [class*="marpit"] section {
-        background-color: ${theme.backgroundColor} !important;
-        color: ${theme.textColor} !important;
+        background-color: ${theme.backgroundColor};
+        color: ${theme.textColor};
         font-family: "${theme.fontFamily}", sans-serif !important;
         transition: background-color 0.3s ease, color 0.3s ease;
       }
