@@ -41,33 +41,23 @@ Professional presentations from Markdown.
 
 ---
 
-# Image Resizing & Filters
+# Air-Gapped Ready
 
-![width:300px brightness:1.2 contrast:1.2](https://picsum.photos/seed/marp/800/600)
+This application is designed to work without an internet connection.
+All rendering is done locally in your browser.
 
-\`![width:300px brightness:1.2 contrast:1.2](...)\`
-
----
-
-![bg left:33% opacity:.8](https://picsum.photos/seed/bg/800/600)
-
-# Split Backgrounds
-
-- Use \`![bg left:33%](...)\`
-- Content automatically shrinks
-- Supports filters like \`opacity:.8\`
+- **Marp Core**: Local
+- **CodeMirror**: Local
+- **Icons**: Local
 
 ---
 
-# Multiple Backgrounds
+# Layouts & Themes
 
-![bg vertical](https://picsum.photos/seed/1/400/300)
-![bg](https://picsum.photos/seed/2/400/300)
-![bg](https://picsum.photos/seed/3/400/300)
-
-- Use \`![bg vertical](...)\`
-- Arrange multiple images
-- Great for side-by-side visuals
+Use the sidebar to:
+1. Change colors and fonts
+2. Insert slide templates
+3. Export to PDF or HTML
 
 ---
 
