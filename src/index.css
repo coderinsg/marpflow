@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Lora:ital,wght@0,400;0,700;1,400&family=Merriweather:wght@400;700&family=Montserrat:wght@400;700&family=Oswald:wght@400;700&family=Outfit:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Roboto:wght@400;700&family=Space+Grotesk:wght@400;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* CodeMirror Overrides */
+.cm-editor {
+  height: 100% !important;
+}
+
+.cm-scroller {
+  font-family: var(--font-mono) !important;
+}
+
+/* Marp Preview Styles */
+.marpit {
+  background: white;
+}
+
+.marpit section {
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  border: 1px solid #eee;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  header, footer, .w-80, .w-1\/2:first-child {
+    display: none !important;
+  }
+  
+  .w-1\/2:last-child {
+    width: 100% !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    background: white !important;
+  }
+  
+  .marpit section {
+    margin: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    page-break-after: always !important;
+  }
+}
