@@ -128,29 +128,6 @@ export const Sidebar: React.FC = () => {
             <h2>Settings</h2>
           </div>
 
-          <section className="space-y-4">
-            <div className="flex items-center gap-2 text-xs font-bold text-neutral-400 uppercase tracking-wider">
-              <Palette size={14} />
-              <span>Base Theme</span>
-            </div>
-            <select 
-              className="w-full p-2 border border-neutral-200 rounded text-sm bg-white"
-              value={(() => {
-                const match = useStore.getState().markdown.match(/^theme:\s*(default|gaia|uncover)/m);
-                return match ? match[1] : 'default';
-              })()}
-              onChange={(e) => {
-                const { markdown, setMarkdown } = useStore.getState();
-                const newMarkdown = markdown.replace(/^theme:\s*(default|gaia|uncover)/m, `theme: ${e.target.value}`);
-                setMarkdown(newMarkdown);
-              }}
-            >
-              <option value="default">Default (White)</option>
-              <option value="gaia">Gaia (Refined)</option>
-              <option value="uncover">Uncover (Centered)</option>
-            </select>
-          </section>
-
           <section className="space-y-6">
             <div className="flex items-center gap-2 text-xs font-bold text-neutral-400 uppercase tracking-wider">
               <Palette size={14} />
