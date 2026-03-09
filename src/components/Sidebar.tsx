@@ -46,7 +46,7 @@ const LAYOUT_TEMPLATES = [
 const ColorPicker = ({ label, value, onChange }: { label: string, value: string, onChange: (val: string) => void }) => (
   <div className="space-y-2">
     <label className="text-xs text-neutral-500 font-medium block">{label}</label>
-    <div className="grid grid-cols-12 gap-1 mb-2">
+    <div className="grid gap-1 mb-2" style={{ gridTemplateColumns: 'repeat(12, minmax(0, 1fr))' }}>
       {PRESET_COLORS.map((color) => (
         <button
           key={color}
@@ -127,6 +127,29 @@ export const Sidebar: React.FC = () => {
             <Settings size={20} />
             <h2>Settings</h2>
           </div>
+
+          <section className="space-y-4">
+            <div className="flex items-center gap-2 text-xs font-bold text-neutral-400 uppercase tracking-wider">
+              <Palette size={14} />
+              <span>Base Theme</span>
+            </div>
+            <select 
+              className="w-full p-2 border border-neutral-200 rounded text-sm bg-white"
+              value={(() => {
+                const match = useStore.getState().markdown.match(/^theme:\s*(default|gaia|uncover)/m);
+                return match ? match[1] : 'default';
+              })()}
+              onChange={(e) => {
+                const { markdown, setMarkdown } = useStore.getState();
+                const newMarkdown = markdown.replace(/^theme:\s*(default|gaia|uncover)/m, `theme: ${e.target.value}`);
+                setMarkdown(newMarkdown);
+              }}
+            >
+              <option value="default">Default (White)</option>
+              <option value="gaia">Gaia (Refined)</option>
+              <option value="uncover">Uncover (Centered)</option>
+            </select>
+          </section>
 
           <section className="space-y-6">
             <div className="flex items-center gap-2 text-xs font-bold text-neutral-400 uppercase tracking-wider">
