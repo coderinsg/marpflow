@@ -3,6 +3,7 @@ import { Editor } from './components/Editor';
 import { Preview } from './components/Preview';
 import { Sidebar } from './components/Sidebar';
 import { Cheatsheet } from './components/Cheatsheet';
+import { LayoutPicker } from './components/LayoutPicker';
 import { Toolbar } from './components/Toolbar';
 import { useStore } from './store/useStore';
 import { PanelLeftClose, PanelLeftOpen, Share2, Play, FileText, X, HelpCircle } from 'lucide-react';
@@ -38,6 +39,7 @@ export default function App() {
   return (
     <div className="h-screen w-screen flex flex-col bg-white overflow-hidden font-sans text-neutral-900">
       <Cheatsheet />
+      <LayoutPicker />
 
       {/* Fullscreen Preview Overlay */}
       <AnimatePresence>

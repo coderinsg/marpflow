@@ -22,6 +22,8 @@ interface AppState {
   setPreviewFullscreen: (value: boolean) => void;
   isCheatsheetOpen: boolean;
   setCheatsheetOpen: (value: boolean) => void;
+  isLayoutPickerOpen: boolean;
+  setLayoutPickerOpen: (value: boolean) => void;
   currentSlide: number;
   setCurrentSlide: (index: number) => void;
   slideCount: number;
@@ -109,6 +111,8 @@ export const useStore = create<AppState>()(
 
       isCheatsheetOpen: false,
       setCheatsheetOpen: (value) => set((state) => state.isCheatsheetOpen === value ? state : { isCheatsheetOpen: value }),
+      isLayoutPickerOpen: false,
+      setLayoutPickerOpen: (value) => set((state) => state.isLayoutPickerOpen === value ? state : { isLayoutPickerOpen: value }),
 
       currentSlide: 0,
       // ✅ Fix 2: Just clamp to slideCount from store — no Marp rendering here

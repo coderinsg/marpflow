@@ -10,39 +10,6 @@ const PRESET_COLORS = [
   '#4b5563', '#9ca3af', '#e5e7eb', '#ffffff', '#78350f', '#14532d'
 ];
 
-const LAYOUT_TEMPLATES = [
-  {
-    name: 'Title Slide',
-    snippet: '---\n# Title\n## Subtitle\n---',
-    description: 'Main presentation title'
-  },
-  {
-    name: 'Content',
-    snippet: '---\n# Slide Title\n\n- Point one\n- Point two\n- Point three\n---',
-    description: 'Standard title and bullets'
-  },
-  {
-    name: 'Section',
-    snippet: '---\n<!-- _class: invert -->\n# Section Header\n---',
-    description: 'Dark section transition'
-  },
-  {
-    name: 'Two Columns',
-    snippet: '---\n# Comparison\n\n<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">\n<div>\n\n### Left Column\n- Content A\n\n</div>\n<div>\n\n### Right Column\n- Content B\n\n</div>\n</div>\n---',
-    description: 'Side-by-side content'
-  },
-  {
-    name: 'Split Image',
-    snippet: '---\n![bg left:40%](https://placehold.co/600x400?text=Local+Image)\n# Title\n\nContent next to image. Replace URL with local path if air-gapped.\n---',
-    description: 'Image on one side'
-  },
-  {
-    name: 'Quote',
-    snippet: '---\n\n> "A meaningful quote that spans the slide to inspire your audience."\n>\n> — Author Name\n\n---',
-    description: 'Centered quote slide'
-  }
-];
-
 const ColorPicker = ({ label, value, onChange }: { label: string, value: string, onChange: (val: string) => void }) => (
   <div className="space-y-2">
     <label className="text-xs text-neutral-500 font-medium block">{label}</label>
@@ -99,21 +66,6 @@ export const Sidebar: React.FC = () => {
     }
   };
 
-  const insertLayout = (snippet: string) => {
-    const { editorView } = useStore.getState();
-    if (!editorView) return;
-
-    const { state, dispatch } = editorView;
-    const { from, to } = state.selection.main;
-    
-    dispatch({
-      changes: { from, to, insert: `\n${snippet}\n` },
-      selection: { anchor: from + snippet.length + 2 }
-    });
-    
-    editorView.focus();
-  };
-
   return (
     <AnimatePresence>
       {isSidebarOpen && (
@@ -140,12 +92,6 @@ export const Sidebar: React.FC = () => {
               onChange={(val) => setTheme({ primaryColor: val })} 
             />
             
-            <ColorPicker 
-              label="Background Color" 
-              value={theme.backgroundColor} 
-              onChange={(val) => setTheme({ backgroundColor: val })} 
-            />
-
             <ColorPicker 
               label="Text Color" 
               value={theme.textColor} 
@@ -176,25 +122,6 @@ export const Sidebar: React.FC = () => {
               <option value="JetBrains Mono">JetBrains Mono (Code)</option>
               <option value="Dancing Script">Dancing Script (Handwriting)</option>
             </select>
-          </section>
-
-          <section className="space-y-4">
-            <div className="flex items-center gap-2 text-xs font-bold text-neutral-400 uppercase tracking-wider">
-              <Layout size={14} />
-              <span>Layouts</span>
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              {LAYOUT_TEMPLATES.map((layout) => (
-                <button
-                  key={layout.name}
-                  onClick={() => insertLayout(layout.snippet)}
-                  className="flex flex-col items-start p-3 rounded-lg border border-neutral-200 hover:border-neutral-900 hover:bg-neutral-50 transition-all text-left group"
-                >
-                  <span className="text-xs font-semibold text-neutral-900 group-hover:text-black">{layout.name}</span>
-                  <span className="text-[10px] text-neutral-500 line-clamp-1">{layout.description}</span>
-                </button>
-              ))}
-            </div>
           </section>
 
           <section className="space-y-4 mt-auto">

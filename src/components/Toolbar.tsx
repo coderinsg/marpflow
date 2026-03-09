@@ -6,12 +6,14 @@ import {
   List, 
   Image as ImageIcon, 
   Layout, 
+  LayoutTemplate,
   PlusSquare, 
   Type,
   Square
 } from 'lucide-react';
 
 export const Toolbar: React.FC = () => {
+  const setLayoutPickerOpen = useStore((state) => state.setLayoutPickerOpen);
   const insertText = (text: string) => {
     const editorView = useStore.getState().editorView;
     if (!editorView) return;
@@ -48,6 +50,11 @@ export const Toolbar: React.FC = () => {
       label: 'Image', 
       icon: <ImageIcon size={16} />, 
       action: () => insertText('\n![width:300px](https://picsum.photos/800/600)\n') 
+    },
+    { 
+      label: 'Slide Layout', 
+      icon: <LayoutTemplate size={16} />, 
+      action: () => setLayoutPickerOpen(true) 
     },
     { 
       label: 'Background', 

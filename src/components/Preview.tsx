@@ -51,10 +51,19 @@ export const Preview: React.FC = () => {
         box-shadow: ${isPreviewFullscreen ? 'none' : '0 10px 30px rgba(0,0,0,0.1)'};
         transition: background-color 0.3s ease;
       }
-      /* High specificity to beat theme defaults but allow inline style (directive) overrides */
-      div.marpit section, div.marpit-fullscreen section, [class*="marpit"] section {
-        background-color: ${theme.backgroundColor};
-        color: ${theme.textColor};
+      /* Global background default, overridden by per-slide directives */
+      .marpit section:not([style*="background"]), 
+      .marpit-fullscreen section:not([style*="background"]),
+      [class*="marpit"] section:not([style*="background"]) {
+        background-color: ${theme.backgroundColor} !important;
+      }
+      /* Global text color default, overridden by per-slide directives */
+      .marpit section:not([style*="color"]), 
+      .marpit-fullscreen section:not([style*="color"]),
+      [class*="marpit"] section:not([style*="color"]) {
+        color: ${theme.textColor} !important;
+      }
+      .marpit section, .marpit-fullscreen section, [class*="marpit"] section {
         font-family: "${theme.fontFamily}", sans-serif !important;
         transition: background-color 0.3s ease, color 0.3s ease;
       }
