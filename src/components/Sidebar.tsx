@@ -48,7 +48,7 @@ export const Sidebar: React.FC = () => {
   const isSidebarOpen = useStore((state) => state.isSidebarOpen);
 
   const handleExport = (format: string) => {
-    const { markdown } = useStore.getState();
+    const { markdown, title } = useStore.getState();
     
     if (format === 'pdf') {
       window.print();
@@ -58,7 +58,7 @@ export const Sidebar: React.FC = () => {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'presentation.md';
+      a.download = `${title || 'presentation'}.md`;
       a.click();
       URL.revokeObjectURL(url);
     } else {
@@ -67,19 +67,22 @@ export const Sidebar: React.FC = () => {
   };
 
   const handleSaveProject = () => {
-    const { markdown, theme } = useStore.getState();
-    const projectData = {
-      version: '1.0',
-      markdown,
+    const { markdown, theme, title } = useStore.getState();
+    const metadata = {
+      version: '1.1',
+      title,
       theme,
       timestamp: new Date().toISOString()
     };
     
-    const blob = new Blob([JSON.stringify(projectData, null, 2)], { type: 'application/json' });
+    // Save as a readable Markdown file with metadata in a hidden comment
+    const fileContent = `${markdown}\n\n<!-- marpflow-metadata: ${JSON.stringify(metadata)} -->`;
+    
+    const blob = new Blob([fileContent], { type: 'text/markdown' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'presentation.marpflow';
+    a.download = `${title || 'presentation'}.md`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -94,16 +97,38 @@ export const Sidebar: React.FC = () => {
     reader.onload = (e) => {
       try {
         const content = e.target?.result as string;
-        const data = JSON.parse(content);
         
-        if (data.markdown && data.theme) {
-          useStore.getState().loadProject(data.markdown, data.theme);
-        } else {
-          alert('Invalid project file format.');
+        // 1. Try to parse as the new .md format with metadata comment
+        const metadataMatch = content.match(/<!-- marpflow-metadata: (.*) -->/);
+        if (metadataMatch) {
+          try {
+            const metadata = JSON.parse(metadataMatch[1]);
+            const markdown = content.replace(/<!-- marpflow-metadata: .* -->/, '').trim();
+            useStore.getState().loadProject(markdown, metadata.theme, metadata.title);
+            return;
+          } catch (err) {
+            console.error('Error parsing metadata comment:', err);
+          }
         }
+
+        // 2. Try to parse as the old .marpflow (JSON) format
+        try {
+          const data = JSON.parse(content);
+          if (data.markdown && data.theme) {
+            useStore.getState().loadProject(data.markdown, data.theme, data.title);
+            return;
+          }
+        } catch (err) {
+          // Not JSON, that's fine
+        }
+
+        // 3. Fallback: load as plain markdown
+        const titleFromFilename = file.name.replace(/\.md$/, '');
+        useStore.getState().loadProject(content, useStore.getState().theme, titleFromFilename);
+        
       } catch (err) {
-        console.error('Error parsing project file:', err);
-        alert('Failed to open project file.');
+        console.error('Error opening file:', err);
+        alert('Failed to open file.');
       }
     };
     reader.readAsText(file);
@@ -196,7 +221,7 @@ export const Sidebar: React.FC = () => {
                 type="file" 
                 ref={fileInputRef} 
                 onChange={handleOpenProject} 
-                accept=".marpflow,application/json" 
+                accept=".md,.marpflow,application/json,text/markdown" 
                 className="hidden" 
               />
             </div>

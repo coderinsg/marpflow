@@ -28,7 +28,9 @@ interface AppState {
   setCurrentSlide: (index: number) => void;
   slideCount: number;
   setSlideCount: (count: number) => void;
-  loadProject: (markdown: string, theme: ThemeConfig) => void;
+  title: string;
+  setTitle: (title: string) => void;
+  loadProject: (markdown: string, theme: ThemeConfig, title?: string) => void;
 }
 
 const DEFAULT_MARKDOWN = `---
@@ -138,8 +140,13 @@ export const useStore = create<AppState>()(
         });
       },
 
-      loadProject: (markdown, theme) => {
-        set({ markdown, theme, currentSlide: 0 });
+      title: 'untitled-deck',
+      setTitle: (title) => set({ title }),
+
+      loadProject: (markdown, theme, title) => {
+        const updates: Partial<AppState> = { markdown, theme, currentSlide: 0 };
+        if (title) updates.title = title;
+        set(updates);
         // Update editor if it exists
         const { editorView } = get();
         if (editorView) {
@@ -155,6 +162,7 @@ export const useStore = create<AppState>()(
         markdown: state.markdown,
         theme: state.theme,
         isSidebarOpen: state.isSidebarOpen,
+        title: state.title,
       }),
     }
   )

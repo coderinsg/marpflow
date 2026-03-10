@@ -77,9 +77,18 @@ export default function App() {
             <h1 className="font-bold tracking-tight text-lg">MarpFlow</h1>
           </div>
           <div className="h-4 w-[1px] bg-neutral-200 mx-2" />
-          <div className="flex items-center gap-1 text-neutral-400 text-sm font-medium">
-            <FileText size={16} />
-            <span>untitled-deck.md</span>
+          <div className="flex items-center gap-1 text-neutral-600 text-sm font-medium group">
+            <FileText size={16} className="text-neutral-400" />
+            <div className="relative flex items-center">
+              <input
+                type="text"
+                value={useStore((state) => state.title)}
+                onChange={(e) => useStore.getState().setTitle(e.target.value)}
+                className="bg-transparent border-none focus:ring-0 p-0 font-medium text-neutral-600 hover:bg-neutral-50 rounded px-1 transition-colors w-auto min-w-[120px]"
+                placeholder="untitled-deck"
+              />
+              <span className="text-neutral-400">.md</span>
+            </div>
           </div>
         </div>
 
