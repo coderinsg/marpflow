@@ -66,6 +66,8 @@ export const Preview: React.FC = () => {
       .marpit h1, .marpit h2, .marpit h3, .marpit strong,
       [class*="marpit"] h1, [class*="marpit"] h2, [class*="marpit"] h3, [class*="marpit"] strong {
         color: ${theme.primaryColor} !important;
+        margin-top: 0 !important;
+        margin-bottom: 0.5rem !important;
       }
       [class*="marpit"] ul {
         list-style: disc !important;

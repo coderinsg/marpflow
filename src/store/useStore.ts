@@ -28,6 +28,7 @@ interface AppState {
   setCurrentSlide: (index: number) => void;
   slideCount: number;
   setSlideCount: (count: number) => void;
+  loadProject: (markdown: string, theme: ThemeConfig) => void;
 }
 
 const DEFAULT_MARKDOWN = `---
@@ -135,6 +136,17 @@ export const useStore = create<AppState>()(
             : state.currentSlide;
           return { slideCount: count, currentSlide };
         });
+      },
+
+      loadProject: (markdown, theme) => {
+        set({ markdown, theme, currentSlide: 0 });
+        // Update editor if it exists
+        const { editorView } = get();
+        if (editorView) {
+          editorView.dispatch({
+            changes: { from: 0, to: editorView.state.doc.length, insert: markdown }
+          });
+        }
       },
     }),
     {

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Settings, Download, Palette, Type, Layout } from 'lucide-react';
+import React, { useRef } from 'react';
+import { Settings, Download, Palette, Type, Layout, Save, FolderOpen, FileJson } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -66,6 +66,54 @@ export const Sidebar: React.FC = () => {
     }
   };
 
+  const handleSaveProject = () => {
+    const { markdown, theme } = useStore.getState();
+    const projectData = {
+      version: '1.0',
+      markdown,
+      theme,
+      timestamp: new Date().toISOString()
+    };
+    
+    const blob = new Blob([JSON.stringify(projectData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'presentation.marpflow';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleOpenProject = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const content = e.target?.result as string;
+        const data = JSON.parse(content);
+        
+        if (data.markdown && data.theme) {
+          useStore.getState().loadProject(data.markdown, data.theme);
+        } else {
+          alert('Invalid project file format.');
+        }
+      } catch (err) {
+        console.error('Error parsing project file:', err);
+        alert('Failed to open project file.');
+      }
+    };
+    reader.readAsText(file);
+    
+    // Reset input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
   return (
     <AnimatePresence>
       {isSidebarOpen && (
@@ -122,6 +170,36 @@ export const Sidebar: React.FC = () => {
               <option value="JetBrains Mono">JetBrains Mono (Code)</option>
               <option value="Dancing Script">Dancing Script (Handwriting)</option>
             </select>
+          </section>
+
+          <section className="space-y-4">
+            <div className="flex items-center gap-2 text-xs font-bold text-neutral-400 uppercase tracking-wider">
+              <FileJson size={14} />
+              <span>Project</span>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <button 
+                onClick={() => fileInputRef.current?.click()}
+                className="flex items-center justify-center gap-2 border border-neutral-200 p-2.5 rounded-lg text-sm font-medium hover:bg-neutral-50 transition-colors"
+              >
+                <FolderOpen size={16} />
+                Open
+              </button>
+              <button 
+                onClick={handleSaveProject}
+                className="flex items-center justify-center gap-2 border border-neutral-200 p-2.5 rounded-lg text-sm font-medium hover:bg-neutral-50 transition-colors"
+              >
+                <Save size={16} />
+                Save
+              </button>
+              <input 
+                type="file" 
+                ref={fileInputRef} 
+                onChange={handleOpenProject} 
+                accept=".marpflow,application/json" 
+                className="hidden" 
+              />
+            </div>
           </section>
 
           <section className="space-y-4 mt-auto">
